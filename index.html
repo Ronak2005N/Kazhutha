@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kazhutha - Card Game</title>
+  <link rel="icon" href="/img/shrek-png-transparent.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="hamburger-container" class="hamburger-container" aria-haspopup="true">
+    <button id="hamburgerBtn" class="hamburger-btn" aria-expanded="false" aria-label="Open menu">☰</button>
+    <div id="hamburgerMenu" class="hamburger-menu" role="menu" aria-hidden="true">
+      <a id="aboutMeLink" class="hamburger-menu-item" href="/AboutMe/about.html">About Me</a>
+    </div>
+  </div>
+  <div class="wrapper">
+    <h1>🐴 Kazhutha Multiplayer (pass‑and‑play) Card Game</h1>
+    <div class="row cols-2">
+      <div class="panel">
+        <h2>Game Table</h2>
+        <div class="content">
+          <div id="status" class="info" style="margin-bottom:10px"></div>
+
+          <div class="table" id="table">
+            <!-- Players will be dynamically created here -->
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="info" style="margin-bottom:6px">Your hand:</div>
+            <div id="hand" class="cards"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Setup & Controls</h2>
+        <div class="content">
+          <!-- Player Count Selector -->
+          <div class="controls" style="margin-bottom: 16px; padding: 12px; background: #0a101d; border-radius: 8px; border: 1px solid #1f2937;">
+            <label style="font-weight: 700; color: var(--accent);">Number of Players: 
+              <select id="playerCount" style="margin-left: 8px; padding: 6px 10px; background: #0b1220; border: 1px solid #1f2937; color: var(--text); border-radius: 6px;">
+                <option value="2">2 Players</option>
+                <option value="3">3 Players</option>
+                <option value="4" selected>4 Players</option>
+                <option value="5">5 Players</option>
+                <option value="6">6 Players</option>
+                <option value="7">7 Players</option>
+                <option value="8">8 Players</option>
+              </select>
+            </label>
+          </div>
+
+          <!-- Player Setup Area -->
+          <div id="playerSetup">
+            <!-- Player controls will be dynamically created here -->
+          </div>
+
+          <div class="controls" style="margin-top:12px">
+            <button id="newGame">🃏 New Game</button>
+            <button id="how">❓ How to Play</button>
+          </div>
+
+          <div style="margin-top:14px; display:grid; gap:8px">
+            <div class="pill" id="leadPill">Lead suit: —</div>
+            <div class="pill" id="turnPill">Turn: —</div>
+            <div class="pill" id="cardsPill">Cards per player: —</div>
+          </div>
+
+          <div style="margin-top:14px">
+            <div style="font-weight:700; margin-bottom:6px">Game Log</div>
+            <div id="log" class="log"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Made By Ronak.</div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

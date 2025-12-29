@@ -1,0 +1,2 @@
+// Deprecated: logic moved to ES modules under /js. This file intentionally left minimal to avoid duplicate logic.
+console.warn('Deprecated script.js loaded — Kazhutha has moved to ES modules under /js.');
