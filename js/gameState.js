@@ -228,6 +228,9 @@ export function playCard(playerIndex, card){
     } else {
         // Off-suit thrown -> schedule pickup by currentHighest.player (host will finalize after pause)
         const collector = currentHighest.player;
+        // Advance turn to next player immediately so the player who just played
+        // cannot play again while the trick is pending finalization.
+        turn = nextActive(turn);
         pendingTrick = { type: 'pickup', collector };
         pushLog(`${players[playerIndex].name} is void in ${leadSuit} and throws ${cardToText(card)} → ${players[collector].name} will pick up the trick!`, 'bad');
         notify();
