@@ -84,8 +84,25 @@ ui.initUI({
     // Called when local UI player clicks a card
     if (mp && mp.getMyPeerId && mp.getMyPeerId()){
       mp.sendPlayRequest(playerIndex, card);
+      return;
+    }
+
+    // Single-player/local: attempt to play and handle end-of-trick pause if needed
+    const res = gameState.playCard(playerIndex, card);
+    if (res && (res.clean || res.pickup)){
+      if (roundTimer){ clearTimeout(roundTimer); roundTimer = null; }
+      if (res.clean && typeof res.nextLeader !== 'undefined') gameState.setDisplayTurn(res.nextLeader);
+      if (res.pickup && typeof res.collector !== 'undefined') gameState.setDisplayTurn(res.collector);
+      gameState.lockTurn();
+      if (gameState.publishState) gameState.publishState();
+      roundTimer = setTimeout(()=>{
+        gameState.finalizePendingTrick();
+        gameState.unlockTurn();
+        if (gameState.publishState) gameState.publishState();
+        roundTimer = null;
+      }, PAUSE_MS);
     } else {
-      gameState.playCard(playerIndex, card);
+      if (gameState.publishState) gameState.publishState();
     }
   },
   onHostGame: ()=>{
