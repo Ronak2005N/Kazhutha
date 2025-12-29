@@ -5,6 +5,8 @@ import * as mp from './multiplayer.js';
 
 let myIndex = null;
 let multiplayerStarted = false;
+const PAUSE_MS = 3000;
+let roundTimer = null;
 
 // Subscribe UI to game state updates
 gameState.subscribe((publicState)=>{
@@ -20,19 +22,46 @@ gameState.subscribeLogs(entry=>{ ui.log(entry.msg, entry.kind); });
 
 function maybeBotPlay(){
   if (gameState.gameOver) return;
-  const p = gameState.players[gameState.turn];
+  // Block if a turn lock / pause is active
+  if (gameState.isTurnLocked && gameState.isTurnLocked()) return;
+  const currentTurn = gameState.turn;
+  const p = gameState.players[currentTurn];
   if (!p) return;
-  // Don't run bot logic on clients — only the host should auto-play bots in multiplayer
-  if (typeof mp !== 'undefined' && mp && mp.amIHost && mp.amIHost() === false) return;
+  // If multiplayer is active, only the host should auto-play bots
+  if (multiplayerStarted && typeof mp !== 'undefined' && mp && mp.amIHost && mp.amIHost() === false) return;
+  // Prevent double-play: if this player already played this trick, do nothing
+  if (gameState.participantsThisTrick && gameState.participantsThisTrick.has(currentTurn)) return;
+
   if (!p.isHuman){
     setTimeout(()=>{
-      // Bot chooses card using pure logic
+      // Re-check guards inside the delayed callback (turn/state may have changed)
+      if (gameState.gameOver) return;
+      if (gameState.isTurnLocked && gameState.isTurnLocked()) return;
+      if (gameState.turn !== currentTurn) return;
+      if (gameState.participantsThisTrick && gameState.participantsThisTrick.has(currentTurn)) return;
+
       const card = chooseCard(gameState, gameState.turn);
-      if (mp && (mp.getMyPeerId && mp.getMyPeerId())){
-        // If multiplayer active, send via mp
+      if (multiplayerStarted && mp && (mp.getMyPeerId && mp.getMyPeerId())){
+        // If multiplayer active, send via mp (host handles pause)
         mp.sendPlayRequest(gameState.turn, card);
       } else {
-        gameState.playCard(gameState.turn, card);
+        // Single-player / local host: apply play and emulate host pause behavior
+        const res = gameState.playCard(gameState.turn, card);
+        if (res && (res.clean || res.pickup)){
+          if (roundTimer){ clearTimeout(roundTimer); roundTimer = null; }
+          if (res.clean && typeof res.nextLeader !== 'undefined') gameState.setDisplayTurn(res.nextLeader);
+          if (res.pickup && typeof res.collector !== 'undefined') gameState.setDisplayTurn(res.collector);
+          gameState.lockTurn();
+          if (gameState.publishState) gameState.publishState();
+          roundTimer = setTimeout(()=>{
+            gameState.finalizePendingTrick();
+            gameState.unlockTurn();
+            if (gameState.publishState) gameState.publishState();
+            roundTimer = null;
+          }, PAUSE_MS);
+        } else {
+          if (gameState.publishState) gameState.publishState();
+        }
       }
     }, 600);
   }
