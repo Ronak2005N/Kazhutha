@@ -1,0 +1,136 @@
+/* GlassEffect/glass.css
+   Apple-style glassmorphism theme applied when body has class "glass-theme".
+   Purely visual: panels, menus, table, controls, cards, and pills updated.
+*/
+
+.glass-theme {
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.12);
+  --glass-strong: rgba(255,255,255,0.08);
+  --glass-shadow: 0 8px 28px rgba(2,6,23,0.55);
+  --accent-glow: rgba(255,255,255,0.06);
+}
+
+/* Subtle page backdrop tint to enhance glass feel */
+.glass-theme body,
+.glass-theme .wrapper {
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+}
+
+/* Panels and cards */
+.glass-theme .panel,
+.glass-theme .controls,
+.glass-theme .cards,
+.glass-theme .table,
+.glass-theme .content,
+.glass-theme .hamburger-menu {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Slightly stronger style for active controls */
+.glass-theme .controls {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+}
+
+/* Pills and status bars */
+.glass-theme .pill,
+.glass-theme .info,
+.glass-theme .log {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.08);
+  color: inherit;
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+}
+
+/* Buttons and interactive elements get a soft highlight */
+.glass-theme button,
+.glass-theme select {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+  color: inherit;
+}
+
+/* Hamburger menu specific adjustments */
+.glass-theme .hamburger-menu {
+  padding: 8px;
+}
+.glass-theme .hamburger-menu-item {
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+.glass-theme .hamburger-menu-item:hover {
+  background: rgba(255,255,255,0.025);
+}
+
+/* Cards and table visual treatment */
+.glass-theme .table {
+  border-radius: 14px;
+}
+.glass-theme .cards {
+  gap: 8px;
+}
+
+/* Footer slight translucency */
+.glass-theme .footer {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Ensure readable text when using translucent backgrounds */
+.glass-theme h1, .glass-theme h2, .glass-theme .info, .glass-theme .pill {
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+/* Small responsive tweak: keep layout & spacing untouched */
+/* No layout properties modified intentionally. */
+
+/* Submenu for Theme -> Glass Effect */
+.glass-theme-submenu {
+  position: absolute;
+  z-index: 1200;
+  min-width: 180px;
+  background: linear-gradient(180deg, rgba(12,14,18,0.9), rgba(8,10,14,0.85));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  transform-origin: top left;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.995);
+  transition: opacity 180ms ease, transform 180ms ease;
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+  color: var(--text, #e6eef8);
+}
+.glass-theme-submenu.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.glass-theme-submenu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.glass-theme-submenu-item:hover {
+  background: rgba(255,255,255,0.02);
+}
+.glass-theme-label {
+  font-size: 14px;
+}
+.glass-theme-check {
+  font-weight: 700;
+  color: var(--accent, #8ab4ff);
+}
