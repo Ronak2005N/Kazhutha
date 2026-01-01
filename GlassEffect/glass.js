@@ -38,7 +38,7 @@
     submenu.setAttribute('role', 'menu');
     submenu.innerHTML = `
       <div class="glass-theme-submenu-item" role="menuitem" data-action="toggle-glass">
-        <span class="glass-theme-label">Glass Effect</span>
+        <span class="glass-theme-label">Carbon Theme</span>
         <span class="glass-theme-check" aria-hidden="true"></span>
       </div>
     `;
